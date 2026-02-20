@@ -1,8 +1,14 @@
 [phases.setup]
-nixPkgs = ["cmake", "gcc", "xorg.libX11", "libglvnd"]
+nixPkgs = [
+    "cmake", 
+    "gcc", 
+    "xorg.libX11", 
+    "xorg.libXext", 
+    "xorg.libXrender", 
+    "libglvnd", 
+    "stdenv.cc.cc.lib"
+]
 
-[phases.build]
-cmds = ["python -m venv .venv", ". .venv/bin/activate", "pip install -r requirements.txt"]
-
-[start]
-cmd = ". .venv/bin/activate && python -m uvicorn main:app --host 0.0.0.0 --port $PORT"
+# This part is crucial for Python to find the .so files
+[variables]
+LD_LIBRARY_PATH = "/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH"
